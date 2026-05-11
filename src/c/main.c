@@ -72,11 +72,9 @@ static uint32_t now_ms(void) {
   return (uint32_t)(t * 1000 + ms);
 }
 
-static void log_event(const char *fmt, ...) {
-  va_list args;
-  va_start(args, fmt);
-  vsnprintf(s_log[s_log_idx], LOG_LINE_LEN, fmt, args);
-  va_end(args);
+static void log_add(const char *msg) {
+  strncpy(s_log[s_log_idx], msg, LOG_LINE_LEN - 1);
+  s_log[s_log_idx][LOG_LINE_LEN - 1] = '\0';
   s_log_idx = (s_log_idx + 1) % LOG_LINES;
 }
 
@@ -125,7 +123,9 @@ static void accel_data_handler(AccelData *data, uint32_t num_samples) {
       if(n - s_last_raw_tap >= TAP_COOLDOWN_MS) {
         s_last_raw_tap = n;
         s_raw_tap_count++;
-        log_event("RAW @%ds pk=%d", elapsed_sec(), (int)peak);
+        { char lb[LOG_LINE_LEN];
+          snprintf(lb, sizeof(lb), "RAW @%ds pk=%d", elapsed_sec(), (int)peak);
+          log_add(lb); }
       }
     }
   }
@@ -140,7 +140,9 @@ static void tap_handler(AccelAxisType axis, int32_t direction) {
   s_tap_last_axis = (int)axis;
   s_tap_last_dir = (int)direction;
   s_last_tap_time_ms = now_ms();
-  log_event("TAP @%ds axis=%d dir=%d", elapsed_sec(), (int)axis, (int)direction);
+  { char lb[LOG_LINE_LEN];
+    snprintf(lb, sizeof(lb), "TAP @%ds axis=%d dir=%d", elapsed_sec(), (int)axis, (int)direction);
+    log_add(lb); }
   if(s_canvas) layer_mark_dirty(s_canvas);
 }
 
@@ -383,7 +385,7 @@ static void down_click(ClickRecognizerRef ref, void *ctx) {
   memset(s_log, 0, sizeof(s_log));
   s_log_idx = 0;
   s_start_time = now_ms();
-  log_event("RESET @%ds", 0);
+  log_add("RESET");
   layer_mark_dirty(s_canvas);
 }
 
@@ -437,7 +439,7 @@ static void init(void) {
   accel_data_service_subscribe(5, accel_data_handler);
   accel_service_set_sampling_rate(ACCEL_SAMPLING_25HZ);
 
-  log_event("START");
+  log_add("START");
 
   // Periodic refresh
   s_refresh_timer = app_timer_register(200, refresh_cb, NULL);
