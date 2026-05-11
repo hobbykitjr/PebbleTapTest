@@ -1,22 +1,29 @@
 {
-  "name": "pebble-tap-test",
-  "author": "Hobbykitjr",
-  "version": "1.0.0",
-  "keywords": ["pebble-app"],
-  "private": true,
-  "dependencies": {},
-  "pebble": {
-    "displayName": "Tap Diagnostic",
-    "uuid": "d4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f90",
-    "sdkVersion": "3",
-    "enableMultiJS": false,
-    "targetPlatforms": ["basalt", "chalk", "emery", "gabbro"],
-    "projectType": "native",
-    "watchapp": {
-      "watchface": false
+    "author": "Hobbykitjr",
+    "dependencies": {},
+    "keywords": [
+        "pebble-app"
+    ],
+    "name": "pebble-tap-test",
+    "pebble": {
+        "displayName": "Tap Diagnostic",
+        "enableMultiJS": false,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "basalt",
+            "chalk",
+            "emery",
+            "gabbro"
+        ],
+        "uuid": "eba8e676-0226-4d4e-9618-d8b92735a4f5",
+        "watchapp": {
+            "watchface": false
+        }
     },
-    "resources": {
-      "media": []
-    }
-  }
+    "version": "1.0.0"
 }
